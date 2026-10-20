@@ -1,0 +1,23 @@
+name: CI Local AI Marketing Starter Validation
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Marketing Starter Bundles
+        run: |
+          python -c "
+          import os, zipfile, glob
+          zips = glob.glob('*.zip')
+          assert len(zips) > 0, 'Starter zip missing'
+          for z in zips:
+              with zipfile.ZipFile(z, 'r') as zf:
+                  print(f'Verified marketing bundle {z}: {len(zf.namelist())} items')
+          print('Local AI marketing starter package verified!')
+          "
